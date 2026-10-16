@@ -3,13 +3,13 @@
 
   // Perfis definidos pelo usuário. Não alterar sem nova validação.
   const PERFIS = [
-    { id: 'municipal', rotulo: 'Profissional de saúde do município de Florianópolis' },
-    { id: 'nao_municipal', rotulo: 'Profissional de saúde não municipal' },
-    { id: 'nao_profissional', rotulo: 'Pessoa que não é profissional de saúde' }
+    { id: 'municipal', rotulo: 'Profissional de saúde da rede municipal de Florianópolis' },
+    { id: 'nao_municipal', rotulo: 'Profissional de saúde externo à rede municipal' },
+    { id: 'nao_profissional', rotulo: 'Pessoa sem vínculo profissional com a área da saúde' }
   ];
 
   const TOTAL_PREVISTO = 60;
-  const PENDENTE = 'PLACEHOLDER — conteúdo oficial pendente';
+  const PENDENTE = 'AGRAVOS — conteúdo oficial pendente';
 
   const estado = {
     agravos: [],
