@@ -13,7 +13,10 @@
 
   <header class="topo">
     <div class="wrap">
-      <p class="marca">Vigilância em Saúde · Demonstração</p>
+      <div class="marca">
+        <span class="marca-simbolo" aria-hidden="true">VS</span>
+        <span class="marca-nome">Vigilância em Saúde<small>Demonstração</small></span>
+      </div>
     </div>
   </header>
 
@@ -24,11 +27,14 @@
   </div>
 
   <main id="principal" class="wrap">
-    <h1>Notificações compulsórias: direcionamento</h1>
-    <p>Busque e selecione um agravo, depois escolha o perfil. O direcionamento aparece somente quando houver conteúdo oficial confirmado.</p>
+    <div class="introducao">
+      <p class="sobretitulo">Consulta de direcionamento</p>
+      <h1>Notificações compulsórias</h1>
+      <p>Encontre um agravo e selecione seu perfil para consultar o direcionamento disponível.</p>
+    </div>
 
     <section aria-labelledby="h-agravo">
-      <h2 id="h-agravo">1. Escolha o agravo</h2>
+      <h2 id="h-agravo"><span class="etapa" aria-hidden="true">01</span> Escolha o agravo</h2>
       <label for="busca">Buscar agravo pelo nome</label>
       <input id="busca" type="search" autocomplete="off" aria-describedby="busca-status">
       <p id="busca-status" role="status"></p>
@@ -36,7 +42,7 @@
     </section>
 
     <section aria-labelledby="h-perfil">
-      <h2 id="h-perfil">2. Escolha o perfil</h2>
+      <h2 id="h-perfil"><span class="etapa" aria-hidden="true">02</span> Escolha o perfil</h2>
       <fieldset>
         <legend>Quem está consultando?</legend>
         <div id="perfis"></div>
@@ -44,7 +50,7 @@
     </section>
 
     <section aria-labelledby="h-resultado">
-      <h2 id="h-resultado">3. Direcionamento</h2>
+      <h2 id="h-resultado"><span class="etapa" aria-hidden="true">03</span> Direcionamento</h2>
       <div id="resultado" class="resultado" aria-live="polite"></div>
     </section>
   </main>
