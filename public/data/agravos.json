@@ -2,10 +2,10 @@
   { "id": "1-acidente-por-animal-peco", "nome": "1. Acidente por animal peçonhento" },
   { "id": "2-anomalias-congenitas", "nome": "2. Anomalias congênitas" },
   { "id": "3-botulismo", "nome": "3. Botulismo" },
-  { "id": "4-brucelose", "nome": "4. Brucelose*" },
+  { "id": "4-brucelose", "nome": "4. Brucelose" },
   { "id": "5-colera", "nome": "5. Cólera" },
   { "id": "6-coqueluche", "nome": "6. Coqueluche" },
-  { "id": "7-dengue", "nome": "7. Dengue**", "subitens": [
+  { "id": "7-dengue", "nome": "7. Dengue", "subitens": [
     { "id": "7-a-caso-suspeito-ou-confirmado-de-dengue", "nome": "7.a - Caso suspeito ou confirmado de dengue" },
     { "id": "7-b-caso-suspeito-ou-confirmado-de-dengue-internado-com-sinais-de-alarme-ou-gravidade", "nome": "7.b - Caso suspeito ou confirmado de dengue internado/com sinais de alarme ou gravidade" },
     { "id": "7-c-caso-suspeito-ou-confirmado-de-dengue-em-gestante", "nome": "7.c - Caso suspeito ou confirmado de dengue em gestante" },
@@ -46,7 +46,7 @@
   ] },
   { "id": "16-esporotricose", "nome": "16. Esporotricose", "subitens": [
     { "id": "16-a-esporotricose-humana", "nome": "16.a - Esporotricose Humana" },
-    { "id": "16-b-esporotricose-animal", "nome": "16.b - Esporotricose Animal*" }
+    { "id": "16-b-esporotricose-animal", "nome": "16.b - Esporotricose Animal" }
   ] },
   { "id": "17-esquistossomose", "nome": "17. Esquistossomose" },
   { "id": "18-evento-de-saude-publica-esp", "nome": "18. Evento de Saúde Pública (ESP) que se constitua ameaça à saúde pública (ver definição no Art. 5º desta portaria)" },
@@ -88,23 +88,23 @@
   { "id": "33-leishmaniose", "nome": "33. Leishmaniose", "subitens": [
     { "id": "33-a-leishmaniose-tegmentar-americana", "nome": "33.a - Leishmaniose Tegumentar Americana" },
     { "id": "33-b-leishmaniose-visceral-humana", "nome": "33.b - Leishmaniose Visceral Humana" },
-    { "id": "33-c-leishmaniose-visceral-canina", "nome": "33.c - Leishmaniose Visceral Canina*" }
+    { "id": "33-c-leishmaniose-visceral-canina", "nome": "33.c - Leishmaniose Visceral Canina" }
   ] },
   { "id": "34-leptospirose", "nome": "34. Leptospirose" },
   { "id": "35-meningites", "nome": "35. Meningites", "subitens": [
     { "id": "35-a-doenca-invasiva-por-haemophilus-influenzae", "nome": "35.a - Doença Invasiva por 'Haemophilus Influenzae'" },
     { "id": "35-b-doenca-meningococica-e-outras-meningites", "nome": "35.b - Doença Meningocócica e outras meningites" },
-    { "id": "35-c-doencas-infecciosas-neuroinvasivas-atipicas-e-potencialmente-associadas-a-agravos-de-notificacao", "nome": "35.c - Doenças infecciosas neuroinvasivas atípicas e potencialmente associadas a agravos de notificação**" }
+    { "id": "35-c-doencas-infecciosas-neuroinvasivas-atipicas-e-potencialmente-associadas-a-agravos-de-notificacao", "nome": "35.c - Doenças infecciosas neuroinvasivas atípicas e potencialmente associadas a agravos de notificação" }
   ] },
   { "id": "36-malaria", "nome": "36. Malária" },
   { "id": "37-mpox", "nome": "37. Mpox" },
-  { "id": "38-near-miss-materno-nmm", "nome": "38. Near Miss Materno (NMM)*" },
+  { "id": "38-near-miss-materno-nmm", "nome": "38. Near Miss Materno (NMM)" },
   { "id": "39-obitos", "nome": "39. Óbitos", "subitens": [
-    { "id": "39-a-obito-fetal", "nome": "39.a - Óbito Fetal**" },
+    { "id": "39-a-obito-fetal", "nome": "39.a - Óbito Fetal" },
     { "id": "39-b-obito-infantil-menor-de-1-ano", "nome": "39.b - Óbito infantil menor de 1 ano" },
-    { "id": "39-c-obito-de-mulher-em-idade-fertil", "nome": "39.c - Óbito de mulher em idade fértil (MIF)**" },
+    { "id": "39-c-obito-de-mulher-em-idade-fertil", "nome": "39.c - Óbito de mulher em idade fértil (MIF)" },
     { "id": "39-d-obito-materno", "nome": "39.d - Óbito materno" },
-    { "id": "39-e-obitos-por-acidente-de-transito", "nome": "39.e - Óbitos por acidente de trânsito**" },
+    { "id": "39-e-obitos-por-acidente-de-transito", "nome": "39.e - Óbitos por acidente de trânsito" },
     { "id": "39-f-obito-com-suspeita-ou-confirmacao-de-agravo-de-notificacao-imediata", "nome": "39.f - Óbito com suspeita ou confirmação de agravo de notificação imediata" }
   ] },
   { "id": "40-parotidite-caxumba", "nome": "40. Parotidite (Caxumba)" },
@@ -138,7 +138,7 @@
   ] },
   { "id": "53-tuberculose", "nome": "53. Tuberculose", "subitens": [
     { "id": "53-a-tuberculose-pulmonar-e-extrapulmonar", "nome": "53.a - Tuberculose pulmonar e extrapulmonar" },
-    { "id": "53-b-infeccao-latente-por-tuberculose-iltb", "nome": "53.b - Infecção latente por tuberculose (ILTB)**" }
+    { "id": "53-b-infeccao-latente-por-tuberculose-iltb", "nome": "53.b - Infecção latente por tuberculose (ILTB)" }
   ] },
   { "id": "54-varicela", "nome": "54. Varicela" },
   { "id": "55-violencias", "nome": "55. Violências", "subitens": [
