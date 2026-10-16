@@ -23,6 +23,11 @@
   const normalizar = (texto) =>
     String(texto).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 
+  function numeroDoAgravo(texto) {
+    const valor = String(texto || '').match(/(\d+)/);
+    return valor ? Number(valor[1]) : Number.MAX_SAFE_INTEGER;
+  }
+
   // Lista vazia => placeholders explícitos, nunca nomes inventados.
   function montarAgravos(dados) {
     if (Array.isArray(dados) && dados.length > 0) {
@@ -65,7 +70,14 @@
         }
       });
 
-      if (itens.length > 0) return itens;
+      if (itens.length > 0) {
+        return itens.sort((a, b) => {
+          const numeroA = numeroDoAgravo(a.nome);
+          const numeroB = numeroDoAgravo(b.nome);
+          if (numeroA !== numeroB) return numeroA - numeroB;
+          return String(a.nome).localeCompare(String(b.nome), 'pt-BR');
+        });
+      }
     }
 
     return Array.from({ length: TOTAL_PREVISTO }, (_, i) => {
@@ -91,13 +103,17 @@
     const lista = $('#lista-agravos');
     lista.textContent = '';
 
-    const grupos = estado.agravos.filter((a) => a.tipo === 'grupo');
-    const itensSimples = estado.agravos.filter((a) => a.tipo === 'item' && (!termo || normalizar(a.nome).includes(termo)));
+    const grupos = estado.agravos.filter((a) => a.tipo === 'grupo')
+      .sort((a, b) => numeroDoAgravo(a.nome) - numeroDoAgravo(b.nome));
+    const itensSimples = estado.agravos.filter((a) => a.tipo === 'item' && (!termo || normalizar(a.nome).includes(termo)))
+      .sort((a, b) => numeroDoAgravo(a.nome) - numeroDoAgravo(b.nome));
 
     const gruposVisiveis = grupos
       .map((grupo) => ({
         ...grupo,
-        subitens: (grupo.subitens || []).filter((sub) => !termo || normalizar(sub.nome).includes(termo))
+        subitens: (grupo.subitens || [])
+          .filter((sub) => !termo || normalizar(sub.nome).includes(termo))
+          .sort((a, b) => numeroDoAgravo(a.nome) - numeroDoAgravo(b.nome))
       }))
       .filter((grupo) => grupo.subitens.length > 0);
 
@@ -112,31 +128,52 @@
       return;
     }
 
+    const blocos = [];
+
     itensSimples.forEach((agravo) => {
-      const li = document.createElement('li');
-      const botao = document.createElement('button');
-      botao.type = 'button';
-      botao.className = 'item-agravo';
-      botao.dataset.id = agravo.id;
-      botao.textContent = agravo.nome;
-      botao.setAttribute('aria-pressed', String(agravo.id === estado.agravoId));
-      li.appendChild(botao);
-      lista.appendChild(li);
+      blocos.push({ tipo: 'item', agravo });
     });
 
     gruposVisiveis.forEach((grupo) => {
+      blocos.push({ tipo: 'grupo', grupo });
+    });
+
+    blocos.sort((a, b) => {
+      const numeroA = numeroDoAgravo(a.tipo === 'item' ? a.agravo.nome : a.grupo.nome);
+      const numeroB = numeroDoAgravo(b.tipo === 'item' ? b.agravo.nome : b.grupo.nome);
+      if (numeroA !== numeroB) return numeroA - numeroB;
+      return String(a.tipo === 'item' ? a.agravo.nome : a.grupo.nome).localeCompare(
+        String(b.tipo === 'item' ? b.agravo.nome : b.grupo.nome),
+        'pt-BR'
+      );
+    });
+
+    blocos.forEach((bloco) => {
+      if (bloco.tipo === 'item') {
+        const li = document.createElement('li');
+        const botao = document.createElement('button');
+        botao.type = 'button';
+        botao.className = 'item-agravo';
+        botao.dataset.id = bloco.agravo.id;
+        botao.textContent = bloco.agravo.nome;
+        botao.setAttribute('aria-pressed', String(bloco.agravo.id === estado.agravoId));
+        li.appendChild(botao);
+        lista.appendChild(li);
+        return;
+      }
+
       const liGrupo = document.createElement('li');
       liGrupo.className = 'grupo-agravo';
 
       const titulo = document.createElement('div');
       titulo.className = 'grupo-agravo-titulo';
-      titulo.textContent = grupo.nome;
+      titulo.textContent = bloco.grupo.nome;
       liGrupo.appendChild(titulo);
 
       const subLista = document.createElement('ul');
       subLista.className = 'sublista-agravos';
 
-      grupo.subitens.forEach((subitem) => {
+      bloco.grupo.subitens.forEach((subitem) => {
         const itemLi = document.createElement('li');
         const botao = document.createElement('button');
         botao.type = 'button';
