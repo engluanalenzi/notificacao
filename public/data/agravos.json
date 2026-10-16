@@ -1,7 +1,7 @@
 [
   { "id": "1-acidente-por-animal-peco", "nome": "1. Acidente por animal peçonhento" },
   { "id": "2-anomalias-congenitas", "nome": "2. Anomalias congênitas" },
-  { "id": "3-boetulismo", "nome": "3. Botulismo" },
+  { "id": "3-botulismo", "nome": "3. Botulismo" },
   { "id": "4-brucelose", "nome": "4. Brucelose*" },
   { "id": "5-colera", "nome": "5. Cólera" },
   { "id": "6-coqueluche", "nome": "6. Coqueluche" },
