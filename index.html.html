@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Direcionamento de notificações compulsórias em saúde (DEMONSTRAÇÃO)</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="pular" href="#principal">Pular para o conteúdo</a>
+
+  <header class="topo">
+    <div class="wrap">
+      <p class="marca">Vigilância em Saúde · Demonstração</p>
+    </div>
+  </header>
+
+  <div class="aviso" role="note">
+    <div class="wrap">
+      <strong>Aviso:</strong> esta ferramenta serve apenas para orientação e direcionamento. Não substitui avaliação profissional nem o protocolo oficial de notificação.
+      <span class="pendente">PLACEHOLDER — conteúdo oficial pendente.</span>
+    </div>
+  </div>
+
+  <main id="principal" class="wrap">
+    <h1>Notificações compulsórias: direcionamento</h1>
+    <p>Busque e selecione um agravo, depois escolha o perfil. O direcionamento aparece somente quando houver conteúdo oficial confirmado.</p>
+
+    <section aria-labelledby="h-agravo">
+      <h2 id="h-agravo">1. Escolha o agravo</h2>
+      <label for="busca">Buscar agravo pelo nome</label>
+      <input id="busca" type="search" autocomplete="off" aria-describedby="busca-status">
+      <p id="busca-status" role="status"></p>
+      <ul id="lista-agravos" class="lista-agravos" aria-label="Lista de agravos"></ul>
+    </section>
+
+    <section aria-labelledby="h-perfil">
+      <h2 id="h-perfil">2. Escolha o perfil</h2>
+      <fieldset>
+        <legend>Quem está consultando?</legend>
+        <div id="perfis"></div>
+      </fieldset>
+    </section>
+
+    <section aria-labelledby="h-resultado">
+      <h2 id="h-resultado">3. Direcionamento</h2>
+      <div id="resultado" class="resultado" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="wrap">
+      <p>Demonstração técnica. Conteúdo, órgãos e links devem ser validados pela equipe responsável antes de qualquer uso público.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
