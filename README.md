@@ -9,7 +9,7 @@ Ferramenta de **orientação e direcionamento**. Não substitui avaliação prof
 ## Pré-requisitos
 - Git
 - Conta no GitHub
-- Conta no Render (plano gratuito de site estático)
+- Conta no Render (plano gratuito de site estático) -> https://notificacao-sms.onrender.com/
 - Navegador atualizado
 - Para teste local: Python 3 (ou qualquer servidor estático)
 
