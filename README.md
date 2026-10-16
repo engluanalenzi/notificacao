@@ -15,6 +15,6 @@ Ferramenta de **orientação e direcionamento**. Não substitui avaliação prof
 
 ## Execução local
 ```bash
-git clone https://github.com/SEU-USUARIO/notificacoes-direcionamento.git
-cd notificacoes-direcionamento/public
+git clone https://github.com/engluanalenzi/notificacao.git
+cd notificacao/public
 python3 -m http.server 8080
