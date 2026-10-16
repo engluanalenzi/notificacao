@@ -9,7 +9,6 @@
   ];
 
   const TOTAL_PREVISTO = 60;
-  const PENDENTE = 'AGRAVOS — conteúdo oficial pendente';
 
   const estado = {
     agravos: [],
@@ -27,15 +26,55 @@
   // Lista vazia => placeholders explícitos, nunca nomes inventados.
   function montarAgravos(dados) {
     if (Array.isArray(dados) && dados.length > 0) {
-      return dados
-        .filter((a) => a && a.id && a.nome)
-        .map((a) => ({ id: String(a.id), nome: String(a.nome), placeholder: false }));
+      const itens = [];
+
+      dados.forEach((item) => {
+        if (!item || !item.id) return;
+
+        const subitens = Array.isArray(item.subitens)
+          ? item.subitens.filter((sub) => sub && sub.id && sub.nome)
+          : [];
+
+        if (subitens.length > 0) {
+          const grupo = {
+            id: String(item.id),
+            nome: String(item.nome || item.id),
+            tipo: 'grupo',
+            selecionavel: false,
+            subitens: subitens.map((sub) => ({
+              id: String(sub.id),
+              nome: String(sub.nome),
+              tipo: 'subitem',
+              selecionavel: true,
+              grupoId: String(item.id),
+              grupoNome: String(item.nome || item.id)
+            }))
+          };
+          itens.push(grupo, ...grupo.subitens);
+          return;
+        }
+
+        if (item.nome) {
+          itens.push({
+            id: String(item.id),
+            nome: String(item.nome),
+            tipo: 'item',
+            selecionavel: true,
+            placeholder: false
+          });
+        }
+      });
+
+      if (itens.length > 0) return itens;
     }
+
     return Array.from({ length: TOTAL_PREVISTO }, (_, i) => {
       const n = String(i + 1).padStart(2, '0');
       return {
         id: `PLACEHOLDER-${n}`,
         nome: `PLACEHOLDER — agravo ${n} — nome oficial pendente`,
+        tipo: 'item',
+        selecionavel: true,
         placeholder: true
       };
     });
@@ -49,18 +88,31 @@
 
   function renderizarListaAgravos() {
     const termo = normalizar(estado.termo);
-    const itens = estado.agravos.filter((a) => !termo || normalizar(a.nome).includes(termo));
     const lista = $('#lista-agravos');
     lista.textContent = '';
 
-    if (itens.length === 0) {
+    const grupos = estado.agravos.filter((a) => a.tipo === 'grupo');
+    const itensSimples = estado.agravos.filter((a) => a.tipo === 'item' && (!termo || normalizar(a.nome).includes(termo)));
+
+    const gruposVisiveis = grupos
+      .map((grupo) => ({
+        ...grupo,
+        subitens: (grupo.subitens || []).filter((sub) => !termo || normalizar(sub.nome).includes(termo))
+      }))
+      .filter((grupo) => grupo.subitens.length > 0);
+
+    const totalExibidos = itensSimples.length + gruposVisiveis.reduce((total, grupo) => total + grupo.subitens.length, 0);
+
+    if (totalExibidos === 0) {
       const li = document.createElement('li');
       li.className = 'vazio';
       li.textContent = 'Nenhum agravo encontrado para esta busca. Revise o termo digitado.';
       lista.appendChild(li);
+      $('#busca-status').textContent = '';
+      return;
     }
 
-    itens.forEach((agravo) => {
+    itensSimples.forEach((agravo) => {
       const li = document.createElement('li');
       const botao = document.createElement('button');
       botao.type = 'button';
@@ -72,9 +124,36 @@
       lista.appendChild(li);
     });
 
-    $('#busca-status').textContent = itens.length
-      ? `${itens.length} agravo(s) exibido(s) de ${estado.agravos.length}.`
-      : '';
+    gruposVisiveis.forEach((grupo) => {
+      const liGrupo = document.createElement('li');
+      liGrupo.className = 'grupo-agravo';
+
+      const titulo = document.createElement('div');
+      titulo.className = 'grupo-agravo-titulo';
+      titulo.textContent = grupo.nome;
+      liGrupo.appendChild(titulo);
+
+      const subLista = document.createElement('ul');
+      subLista.className = 'sublista-agravos';
+
+      grupo.subitens.forEach((subitem) => {
+        const itemLi = document.createElement('li');
+        const botao = document.createElement('button');
+        botao.type = 'button';
+        botao.className = 'item-agravo item-subitem';
+        botao.dataset.id = subitem.id;
+        botao.textContent = subitem.nome;
+        botao.setAttribute('aria-pressed', String(subitem.id === estado.agravoId));
+        itemLi.appendChild(botao);
+        subLista.appendChild(itemLi);
+      });
+
+      liGrupo.appendChild(subLista);
+      lista.appendChild(liGrupo);
+    });
+
+    const totalSelecionavel = estado.agravos.filter((a) => a.selecionavel !== false).length;
+    $('#busca-status').textContent = `${totalExibidos} agravo(s) exibido(s) de ${totalSelecionavel}.`;
   }
 
   function renderizarPerfis() {
@@ -131,7 +210,6 @@
 
     if (!valido) {
       caixa.appendChild(criarLinha('p', 'Não há direcionamento oficial confirmado para esta combinação.', 'estado'));
-      caixa.appendChild(criarLinha('p', PENDENTE, 'pendente'));
       return;
     }
 
