@@ -102,12 +102,14 @@
   }
 
   let tituloComConceito = null;
+  let posicaoDoMouse = null;
 
   function ocultarConceito() {
     const balão = $('#conceito-agravo');
     balão.hidden = true;
     tituloComConceito?.removeAttribute('aria-describedby');
     tituloComConceito = null;
+    posicaoDoMouse = null;
   }
 
   function posicionarConceito() {
@@ -117,28 +119,48 @@
     const margem = 12;
     const limiteLargura = window.innerWidth;
     const limiteAltura = window.innerHeight;
-    const titulo = tituloComConceito.getBoundingClientRect();
     const caixa = balão.getBoundingClientRect();
-    const esquerda = Math.max(margem, Math.min(
-      titulo.left,
-      limiteLargura - caixa.width - margem
-    ));
-    const abaixo = titulo.bottom + margem;
-    const acima = titulo.top - caixa.height - margem;
-    const topo = abaixo + caixa.height <= limiteAltura - margem
-      ? abaixo
-      : Math.max(margem, acima);
+    let esquerda;
+    let topo;
+
+    if (posicaoDoMouse) {
+      const espacamento = 12;
+      esquerda = posicaoDoMouse.x + espacamento;
+      if (esquerda + caixa.width > limiteLargura - margem) {
+        esquerda = posicaoDoMouse.x - caixa.width - espacamento;
+      }
+      topo = posicaoDoMouse.y + espacamento;
+      if (topo + caixa.height > limiteAltura - margem) {
+        topo = posicaoDoMouse.y - caixa.height - espacamento;
+      }
+      esquerda = Math.max(margem, Math.min(esquerda, limiteLargura - caixa.width - margem));
+      topo = Math.max(margem, Math.min(topo, limiteAltura - caixa.height - margem));
+    } else {
+      const titulo = tituloComConceito.getBoundingClientRect();
+      esquerda = Math.max(margem, Math.min(
+        titulo.left,
+        limiteLargura - caixa.width - margem
+      ));
+      const abaixo = titulo.bottom + margem;
+      const acima = titulo.top - caixa.height - margem;
+      topo = abaixo + caixa.height <= limiteAltura - margem
+        ? abaixo
+        : Math.max(margem, acima);
+    }
 
     balão.style.left = `${esquerda}px`;
     balão.style.top = `${topo}px`;
   }
 
-  function mostrarConceito(titulo) {
+  function mostrarConceito(titulo, evento) {
     const balão = $('#conceito-agravo');
     if (tituloComConceito && tituloComConceito !== titulo) {
       tituloComConceito.removeAttribute('aria-describedby');
     }
     tituloComConceito = titulo;
+    posicaoDoMouse = evento && evento.pointerType === 'mouse'
+      ? { x: evento.clientX, y: evento.clientY }
+      : null;
     balão.textContent = titulo.dataset.conceito || 'Conceito a definir.';
     balão.hidden = false;
     titulo.setAttribute('aria-describedby', balão.id);
@@ -148,7 +170,7 @@
   function configurarConceito(titulo, conceito) {
     titulo.dataset.conceito = conceito || '';
     titulo.addEventListener('pointerenter', (evento) => {
-      if (evento.pointerType === 'mouse') mostrarConceito(titulo);
+      if (evento.pointerType === 'mouse') mostrarConceito(titulo, evento);
     });
     titulo.addEventListener('pointerleave', (evento) => {
       if (evento.pointerType === 'mouse' && tituloComConceito === titulo) ocultarConceito();
