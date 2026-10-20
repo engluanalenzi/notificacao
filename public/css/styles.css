@@ -89,6 +89,26 @@ button:focus-visible, input[type="radio"]:focus-visible {
 .item-agravo:hover { background: #e8f3fa; }
 .item-agravo[aria-pressed="true"] { background: var(--cor-primaria); color: #fff; font-weight: 650; }
 .vazio { padding: .9rem; color: var(--cor-texto-suave); }
+.conceito-agravo {
+  position: fixed;
+  z-index: 20;
+  width: max-content;
+  max-width: min(22rem, calc(100vw - 1.5rem));
+  max-height: min(12rem, calc(100vh - 1.5rem));
+  overflow: auto;
+  padding: .7rem .85rem;
+  color: #fff;
+  background: #173452;
+  border: 1px solid #fff;
+  border-radius: 7px;
+  box-shadow: 0 6px 20px rgba(16, 50, 86, .24);
+  font-size: .9rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+.conceito-agravo[hidden] { display: none; }
+.grupo-agravo-titulo:focus-visible { outline: 3px solid #12a8d8; outline-offset: 3px; }
 
 fieldset { min-width: 0; border: 0; border-top: 1px solid var(--cor-borda); padding: 1rem 0 0; }
 legend { font-weight: 700; padding: 0 .25rem 0 0; }
