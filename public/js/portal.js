@@ -14,7 +14,7 @@
     descricao.hidden = true;
     aplicacao.hidden = false;
     titulo.textContent = 'NOTIFICAÇÃO COMPULSÓRIA';
-    migalha.textContent = 'Home > Vigilância em Saúde do Trabalhador > Notificação Compulsória';
+    migalha.textContent = 'Home > Notificação Compulsória';
     item.setAttribute('aria-current', 'page');
 
     if (!aplicacao.getAttribute('src')) aplicacao.src = aplicacao.dataset.src;
