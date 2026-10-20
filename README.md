@@ -5,6 +5,7 @@ Ferramenta de **orientação e direcionamento**. Não substitui avaliação prof
 ## Status do conteúdo
 - A lista de agravos e os direcionamentos são **placeholders** até que a tabela oficial seja fornecida e validada.
 - Nenhum órgão, link ou orientação oficial foi incluído.
+- Para exibir o conceito no balão de um agravo, inclua o campo opcional `"conceito"` no respectivo item ou subitem de `public/data/agravos.json`. Enquanto não houver definição, o balão indica que o conceito está pendente.
 
 ## Pré-requisitos
 - Git
