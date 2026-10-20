@@ -44,11 +44,13 @@
           const grupo = {
             id: String(item.id),
             nome: String(item.nome || item.id),
+            conceito: typeof item.conceito === 'string' ? item.conceito.trim() : '',
             tipo: 'grupo',
             selecionavel: false,
             subitens: subitens.map((sub) => ({
               id: String(sub.id),
               nome: String(sub.nome),
+              conceito: typeof sub.conceito === 'string' ? sub.conceito.trim() : '',
               tipo: 'subitem',
               selecionavel: true,
               grupoId: String(item.id),
@@ -63,6 +65,7 @@
           itens.push({
             id: String(item.id),
             nome: String(item.nome),
+            conceito: typeof item.conceito === 'string' ? item.conceito.trim() : '',
             tipo: 'item',
             selecionavel: true,
             placeholder: false
@@ -98,9 +101,66 @@
     return resposta.json();
   }
 
+  let tituloComConceito = null;
+
+  function ocultarConceito() {
+    const balão = $('#conceito-agravo');
+    balão.hidden = true;
+    tituloComConceito?.removeAttribute('aria-describedby');
+    tituloComConceito = null;
+  }
+
+  function posicionarConceito() {
+    if (!tituloComConceito) return;
+
+    const balão = $('#conceito-agravo');
+    const margem = 12;
+    const limiteLargura = window.innerWidth;
+    const limiteAltura = window.innerHeight;
+    const titulo = tituloComConceito.getBoundingClientRect();
+    const caixa = balão.getBoundingClientRect();
+    const esquerda = Math.max(margem, Math.min(
+      titulo.left,
+      limiteLargura - caixa.width - margem
+    ));
+    const abaixo = titulo.bottom + margem;
+    const acima = titulo.top - caixa.height - margem;
+    const topo = abaixo + caixa.height <= limiteAltura - margem
+      ? abaixo
+      : Math.max(margem, acima);
+
+    balão.style.left = `${esquerda}px`;
+    balão.style.top = `${topo}px`;
+  }
+
+  function mostrarConceito(titulo) {
+    const balão = $('#conceito-agravo');
+    if (tituloComConceito && tituloComConceito !== titulo) {
+      tituloComConceito.removeAttribute('aria-describedby');
+    }
+    tituloComConceito = titulo;
+    balão.textContent = titulo.dataset.conceito || 'Conceito a definir.';
+    balão.hidden = false;
+    titulo.setAttribute('aria-describedby', balão.id);
+    posicionarConceito();
+  }
+
+  function configurarConceito(titulo, conceito) {
+    titulo.dataset.conceito = conceito || '';
+    titulo.addEventListener('pointerenter', (evento) => {
+      if (evento.pointerType === 'mouse') mostrarConceito(titulo);
+    });
+    titulo.addEventListener('pointerleave', (evento) => {
+      if (evento.pointerType === 'mouse' && tituloComConceito === titulo) ocultarConceito();
+    });
+    titulo.addEventListener('focus', () => mostrarConceito(titulo));
+    titulo.addEventListener('blur', ocultarConceito);
+  }
+
   function renderizarListaAgravos() {
     const termo = normalizar(estado.termo);
     const lista = $('#lista-agravos');
+    ocultarConceito();
     lista.textContent = '';
 
     const grupos = estado.agravos.filter((a) => a.tipo === 'grupo')
@@ -157,6 +217,7 @@
         botao.dataset.id = bloco.agravo.id;
         botao.textContent = bloco.agravo.nome;
         botao.setAttribute('aria-pressed', String(bloco.agravo.id === estado.agravoId));
+        configurarConceito(botao, bloco.agravo.conceito);
         li.appendChild(botao);
         lista.appendChild(li);
         return;
@@ -168,6 +229,8 @@
       const titulo = document.createElement('div');
       titulo.className = 'grupo-agravo-titulo';
       titulo.textContent = bloco.grupo.nome;
+      titulo.tabIndex = 0;
+      configurarConceito(titulo, bloco.grupo.conceito);
       liGrupo.appendChild(titulo);
 
       const subLista = document.createElement('ul');
@@ -181,6 +244,7 @@
         botao.dataset.id = subitem.id;
         botao.textContent = subitem.nome;
         botao.setAttribute('aria-pressed', String(subitem.id === estado.agravoId));
+        configurarConceito(botao, subitem.conceito);
         itemLi.appendChild(botao);
         subLista.appendChild(itemLi);
       });
@@ -266,6 +330,9 @@
   }
 
   function configurarEventos() {
+    window.addEventListener('resize', posicionarConceito);
+    window.addEventListener('scroll', posicionarConceito, true);
+
     $('#busca').addEventListener('input', (evento) => {
       estado.termo = evento.target.value;
       renderizarListaAgravos();
