@@ -161,7 +161,7 @@
     posicaoDoMouse = evento && evento.pointerType === 'mouse'
       ? { x: evento.clientX, y: evento.clientY }
       : null;
-    balão.textContent = titulo.dataset.conceito || 'Conceito a definir.';
+    balão.textContent = titulo.dataset.conceito || 'Definição não disponível na lista enviada.';
     balão.hidden = false;
     titulo.setAttribute('aria-describedby', balão.id);
     posicionarConceito();
