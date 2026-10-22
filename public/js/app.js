@@ -330,8 +330,13 @@
     conteudo.className = 'resultado-conteudo';
     caixa.appendChild(conteudo);
 
-    if (!agravo && !perfil) {
-      conteudo.appendChild(criarLinha('p', 'Selecione um agravo e um perfil para ver o direcionamento.', 'resultado-mensagem'));
+    if (!agravo) {
+      conteudo.appendChild(criarLinha('p', 'Selecione um agravo para ver o direcionamento.', 'resultado-mensagem'));
+      return;
+    }
+
+    if (!perfil) {
+      conteudo.appendChild(criarLinha('p', 'Selecione um perfil para ver o direcionamento.', 'resultado-mensagem'));
       return;
     }
 
@@ -392,15 +397,6 @@
       contato.appendChild(copiar);
       contato.appendChild(criarLinha('p', '', 'resultado-status-copia'));
       conteudo.appendChild(contato);
-      return;
-    }
-
-    if (!agravo) {
-      conteudo.appendChild(criarLinha('p', 'Falta selecionar o agravo.', 'resultado-mensagem'));
-      return;
-    }
-    if (!perfil) {
-      conteudo.appendChild(criarLinha('p', 'Falta selecionar o perfil.', 'resultado-mensagem'));
       return;
     }
 
