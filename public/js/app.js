@@ -328,6 +328,17 @@
     caixa.appendChild(criarLinha('p', `Agravo: ${agravo.nome}`, 'estado'));
     caixa.appendChild(criarLinha('p', `Perfil: ${perfil.rotulo}`, 'estado'));
 
+    if (perfil.id === 'nao_profissional') {
+      caixa.appendChild(criarLinha('h3', 'Direcionamento'));
+      const contato = document.createElement('p');
+      const telefone = document.createElement('a');
+      telefone.href = 'tel:+5548933009983';
+      telefone.textContent = 'CIEVS Florianópolis - +55 (48) 93300-9983';
+      contato.appendChild(telefone);
+      caixa.appendChild(contato);
+      return;
+    }
+
     const dados = estado.direcionamentos[agravo.id] && estado.direcionamentos[agravo.id][perfil.id];
     const valido = dados && typeof dados.texto === 'string' && dados.texto.trim() !== '';
 
