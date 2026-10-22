@@ -6,93 +6,37 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Vigilância em Saúde — Demonstração</title>
-  <link rel="stylesheet" href="css/portal.css?v=20261020-cachefix">
+  <link rel="stylesheet" href="css/portal.css?v=20261022-simplificado">
 </head>
 <body>
-  <header>
-    <nav class="portal-utilidades" aria-label="Links institucionais">
-      <div class="portal-utilidades-links">
-        <a href="#intranet">Intranet</a><span aria-hidden="true">|</span>
-        <a href="#contatos">Contatos</a><span aria-hidden="true">|</span>
-        <a href="#portal">Portal do servidor</a><span aria-hidden="true">|</span>
-        <a href="#webmail">Webmail</a><span aria-hidden="true">|</span>
-        <a href="#mapa">Mapa de Obras</a><span aria-hidden="true">|</span>
-        <a href="#dados">Dados Abertos</a><span aria-hidden="true">|</span>
-        <a href="#acesso">Acesso à Informação e Denúncias</a>
-      </div>
-      <a class="portal-redes" href="#prefeitura">Siga a prefeitura&nbsp; ● f&nbsp; ◎</a>
-    </nav>
+  <main id="conteudo" class="portal-conteudo" tabindex="-1">
+    <p id="migalha-conteudo" class="portal-migalha">HOME &gt;</p>
+    <h1 id="titulo-conteudo">ALERTAS EPIDEMIOLÓGICOS</h1>
+    <p id="descricao-alertas" class="portal-descricao">Instrumentos de informação para alertar a população e profissionais sobre a eminência e prevenção de epidemias e pandemias.</p>
+    <a id="link-notificacao" class="portal-atalho-notificacao" href="notificacao.html" aria-controls="aplicacao-notificacao">Acessar Notificação Compulsória</a>
 
-    <div class="portal-cabecalho">
-      <a class="portal-logo" href="index.html" aria-label="Vigilância em Saúde - página inicial">
-        <img src="images/logo-prefeitura-florianopolis.png" alt="Prefeitura de Florianópolis">
-      </a>
-      <nav class="portal-nav-principal" aria-label="Navegação principal">
-        <a href="#servicos">Carta de Serviços</a>
-        <a href="#editais">Editais</a>
-        <a href="#licitacoes">Licitações</a>
-        <a href="#prefeitura">Prefeitura</a>
-        <a href="#estrutura">Estrutura</a>
-        <a href="#transparencia">Transparência</a>
-        <a href="#parque">Parque Urbano e Marina</a>
-        <a class="portal-nav-destaque" href="#aprova">Aprova Digital</a>
-        <a class="portal-nav-destaque" href="#habitacional">Cadastro Habitacional</a>
-        <a class="portal-nav-destaque" href="#procon">PROCON ONLINE</a>
-        <a class="portal-agendar" href="#video">AGENDAR VÍDEO ATENDIMENTO</a>
-        <a class="portal-agendar portal-agendar-presencial" href="#presencial">AGENDAR ATENDIMENTO PRESENCIAL</a>
-      </nav>
-    </div>
-  </header>
+    <ul id="lista-alertas" class="portal-alertas" aria-label="Alertas epidemiológicos">
+      <li><a href="#alerta-dengue"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Dengue Maio/13</a></li>
+      <li><a href="#alerta-varicela"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Varicela Julho/13</a></li>
+      <li><a href="#alerta-sifilis"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Sífilis Outubro/13</a></li>
+      <li><a href="#alerta-sarampo"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Sarampo Fevereiro/14</a></li>
+      <li><a href="#alerta-moluscos"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Moluscos Bivalves em Santo Antônio/14</a></li>
+      <li><a href="#alerta-poliomielite"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Poliomielite 2014</a></li>
+      <li><a href="#alerta-ebola"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Ebola 12 de setembro de 2014</a></li>
+      <li><a href="#alerta-enchentes"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Enchentes Julho/15</a></li>
+      <li><a href="#alerta-influenza"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Influenza Tipo B Outubro/15</a></li>
+      <li><a href="#alerta-zika"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Dengue, Zika e Chikungunya/15</a></li>
+    </ul>
 
-  <div class="portal-layout">
-    <aside class="portal-menu" aria-label="Menu da Vigilância em Saúde">
-      <div class="portal-selo">
-        <img src="images/logo-vigilancia-saude.png" alt="Vigilância em Saúde">
-      </div>
-
-      <a class="portal-home" href="index.html"><span aria-hidden="true">⌂</span>&nbsp;&nbsp; HOME</a>
-
-      <nav class="portal-secoes" aria-label="Seções">
-        <a class="portal-secao" href="#apresentacao">APRESENTAÇÃO</a>
-        <a class="portal-secao" href="#controle">CONTROLE DE INFECÇÃO EM SERVIÇOS DE SAÚDE</a>
-        <a class="portal-secao" href="#laboratorio">LABORATÓRIO DE SAÚDE PÚBLICA - LAMUF</a>
-        <a class="portal-secao" href="#servicos-documentos">LISTAGEM DE SERVIÇOS E DOCUMENTOS</a>
-        <a class="portal-secao" href="#promocao">PROMOÇÃO DA SAÚDE</a>
-        <a class="portal-secao" href="#epidemiologica">VIGILÂNCIA EPIDEMIOLÓGICA</a>
-        <a class="portal-secao" href="#sanitaria">VIGILÂNCIA SANITÁRIA E AMBIENTAL</a>
-        <a class="portal-secao" href="#trabalhador">VIGILÂNCIA EM SAÚDE DO TRABALHADOR</a>
-        <a id="link-notificacao" class="portal-secao" href="notificacao.html" aria-controls="aplicacao-notificacao">NOTIFICAÇÃO COMPULSÓRIA</a>
-      </nav>
-    </aside>
-
-    <main id="conteudo" class="portal-conteudo" tabindex="-1">
-      <p id="migalha-conteudo" class="portal-migalha">HOME &gt;</p>
-      <h1 id="titulo-conteudo">ALERTAS EPIDEMIOLÓGICOS</h1>
-      <p id="descricao-alertas" class="portal-descricao">Instrumentos de informação para alertar a população e profissionais sobre a eminência e prevenção de epidemias e pandemias.</p>
-
-      <ul id="lista-alertas" class="portal-alertas" aria-label="Alertas epidemiológicos">
-        <li><a href="#alerta-dengue"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Dengue Maio/13</a></li>
-        <li><a href="#alerta-varicela"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Varicela Julho/13</a></li>
-        <li><a href="#alerta-sifilis"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Sífilis Outubro/13</a></li>
-        <li><a href="#alerta-sarampo"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Sarampo Fevereiro/14</a></li>
-        <li><a href="#alerta-moluscos"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Moluscos Bivalves em Santo Antônio/14</a></li>
-        <li><a href="#alerta-poliomielite"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Poliomielite 2014</a></li>
-        <li><a href="#alerta-ebola"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Ebola 12 de setembro de 2014</a></li>
-        <li><a href="#alerta-enchentes"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Enchentes Julho/15</a></li>
-        <li><a href="#alerta-influenza"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Influenza Tipo B Outubro/15</a></li>
-        <li><a href="#alerta-zika"><span class="portal-alerta-icone" aria-hidden="true">›</span>Alerta Dengue, Zika e Chikungunya/15</a></li>
-      </ul>
-
-      <iframe
-        id="aplicacao-notificacao"
-        class="portal-aplicacao"
-        title="Aplicação de Notificação Compulsória"
-        data-src="notificacao.html?v=20261021-conceitos"
-        scrolling="no"
-        hidden></iframe>
-      <p class="portal-aviso">Página demonstrativa. Este portal e seus links são fictícios e não representam um serviço oficial da Prefeitura.</p>
-    </main>
-  </div>
+    <iframe
+      id="aplicacao-notificacao"
+      class="portal-aplicacao"
+      title="Aplicação de Notificação Compulsória"
+      data-src="notificacao.html?v=20261021-conceitos"
+      scrolling="no"
+      hidden></iframe>
+    <p class="portal-aviso">Página demonstrativa. Este portal e seus links são fictícios e não representam um serviço oficial da Prefeitura.</p>
+  </main>
 
   <script src="js/portal.js?v=20261020-single-scroll-v3" defer></script>
 </body>
