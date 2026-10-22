@@ -120,6 +120,24 @@ h1 {
 .botao-ligar { color: #fff; background: #087f89; }
 .botao-ligar:hover { background: #066b74; }
 .botao-ligar-icone { font-size: 1.05rem; }
+.botao-celk {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  padding: .7rem 1.1rem;
+  border-radius: 9px;
+  color: #fff;
+  background: #087f89;
+  font-size: .95rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .16s ease, transform .16s ease;
+}
+.botao-celk:hover { background: #066b74; transform: translateY(-1px); }
+.botao-celk:focus-visible { outline: 3px solid #12a8d8; outline-offset: 3px; }
+.botao-celk-icone { font-size: 1.1rem; }
 .botao-copiar { margin-top: .8rem; border-color: var(--cor-borda); color: var(--cor-primaria-escura); background: transparent; font-weight: 500; }
 .botao-copiar:hover { border-color: #93bec8; background: rgba(255, 255, 255, .55); }
 .botao-ligar:focus-visible, .botao-copiar:focus-visible { outline: 3px solid #12a8d8; outline-offset: 3px; }
@@ -201,6 +219,7 @@ legend { font-weight: 700; padding: 0 .25rem 0 0; }
   .resultado-conteudo { padding: 0 .75rem .75rem; }
   .resultado-contato { padding: 1rem; }
   .resultado-contato-acoes { align-items: flex-start; flex-direction: column; }
+  .botao-celk { width: 100%; }
   .introducao { padding-top: 0; }
   h1 { font-size: 1.9rem; }
   .lista-agravos { max-height: 280px; }
