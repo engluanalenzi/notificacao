@@ -1,47 +1,23 @@
 (() => {
   'use strict';
 
-  const item = document.querySelector('#link-notificacao');
-  const titulo = document.querySelector('#titulo-conteudo');
-  const migalha = document.querySelector('#migalha-conteudo');
-  const descricao = document.querySelector('#descricao-alertas');
-  const alertas = document.querySelector('#lista-alertas');
   const aplicacao = document.querySelector('#aplicacao-notificacao');
-  const margemAlturaAplicacao = 160;
-  let intervaloAjusteAltura;
 
   function ajustarAlturaAplicacao() {
-    if (aplicacao.hidden || !aplicacao.contentDocument) return;
-
     const documento = aplicacao.contentDocument;
+    if (!documento || !documento.body) return;
+
     const altura = Math.max(
       documento.documentElement.scrollHeight,
       documento.body.scrollHeight,
       documento.body.offsetHeight
-    ) + margemAlturaAplicacao;
+    );
     if (Math.abs(aplicacao.getBoundingClientRect().height - altura) > 1) {
       aplicacao.style.height = `${altura}px`;
     }
   }
 
-  item.addEventListener('click', (evento) => {
-    evento.preventDefault();
-    alertas.hidden = true;
-    descricao.hidden = true;
-    aplicacao.hidden = false;
-    titulo.textContent = 'NOTIFICAÇÃO COMPULSÓRIA';
-    migalha.textContent = 'Home > Notificação Compulsória';
-    item.setAttribute('aria-current', 'page');
-
-    if (!aplicacao.getAttribute('src')) aplicacao.src = aplicacao.dataset.src;
-    if (!intervaloAjusteAltura) {
-      intervaloAjusteAltura = window.setInterval(ajustarAlturaAplicacao, 200);
-    }
-    ajustarAlturaAplicacao();
-    aplicacao.focus();
-  });
-
-  window.addEventListener('resize', () => {
-    ajustarAlturaAplicacao();
-  });
+  aplicacao.addEventListener('load', ajustarAlturaAplicacao);
+  window.addEventListener('resize', ajustarAlturaAplicacao);
+  ajustarAlturaAplicacao();
 })();
