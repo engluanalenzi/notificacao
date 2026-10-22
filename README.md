@@ -4,9 +4,9 @@ Ferramenta de **orientação e direcionamento**. Não substitui avaliação prof
 
 ## Status do conteúdo
 - A lista de agravos e os direcionamentos são **placeholders** até que a tabela oficial seja fornecida e validada.
-- Nenhum órgão, link ou orientação oficial foi incluído.
+- Para qualquer agravo, o perfil **Profissional de saúde da rede municipal de Florianópolis** recebe o link do Celk Saúde: `https://florianopolis.celk.com.br/vigilancia/registroagravo/consultaRegistroAgravo?4&cdPrg=545`. O perfil **Pessoa sem vínculo profissional com a área da saúde** recebe o direcionamento ao CIEVS Florianópolis pelo telefone +55 (48) 93300-9983. O perfil **Profissional de saúde externo à rede municipal** recebe o link da Vigilância Epidemiológica para agravos fora do item 15. Os demais direcionamentos aguardam validação.
 - Para exibir o conceito no balão de um agravo, inclua o campo opcional `"conceito"` no respectivo item ou subitem de `public/data/agravos.json`. Enquanto não houver definição, o balão indica que o conceito está pendente.
-- A página inicial apresenta os alertas em um portal demonstrativo simplificado. O atalho **Acessar Notificação Compulsória** abre a aplicação em `public/notificacao.html` dentro da área principal.
+- A página inicial abre diretamente a aplicação de notificações compulsórias em `public/notificacao.html`.
 
 ## Pré-requisitos
 - Git
