@@ -1,5 +1,5 @@
 [
-  {"id": "1-doencas-relacionadas-ao-trabalho", "nome": "1. Doenças relacionadas ao trabalho", "subitens": [
+  {"id": "1-doencas-relacionadas-ao-trabalho", "nome": "1. Acidentes ou Doenças relacionadas ao trabalho", "subitens": [
     {"id": "1-a-acidente-de-trabalho", "nome": "1.a - Acidente de trabalho", "conceito": "Caso de acidente ocorrido no exercício do trabalho ou a serviço da atividade laboral, que provoque lesão corporal ou perturbação funcional, com perda ou redução temporária ou permanente da capacidade para o trabalho ou morte, incluindo acidentes ocorridos no trajeto quando abrangidos pela definição adotada para vigilância."},
     {"id": "1-b-acidente-de-trabalho-com-exposicao-a-material-biologico", "nome": "1.b - Acidente de trabalho com exposição a material biológico", "conceito": "Acidente ocorrido durante atividade laboral, com exposição percutânea, mucosa, pele não íntegra ou outra via relevante a sangue ou material biológico potencialmente infectante."},
     {"id": "1-c-cancer-relacionado-ao-trabalho", "nome": "1.c - Câncer relacionado ao trabalho", "conceito": "Pessoa com neoplasia maligna diagnosticada e suspeita ou evidência de relação com exposição ocupacional a agentes cancerígenos ou condições de trabalho, considerando história ocupacional, latência, evidências científicas e critérios de vigilância."},
