@@ -305,6 +305,14 @@
     return el;
   }
 
+  function criarCampoResultado(rotulo, valor) {
+    const campo = document.createElement('div');
+    campo.className = 'resultado-campo';
+    campo.appendChild(criarLinha('span', rotulo, 'resultado-rotulo'));
+    campo.appendChild(criarLinha('strong', valor, 'resultado-valor'));
+    return campo;
+  }
+
   function renderizarResultado() {
     const caixa = $('#resultado');
     caixa.textContent = '';
@@ -312,30 +320,64 @@
     const agravo = estado.agravos.find((a) => a.id === estado.agravoId);
     const perfil = PERFIS.find((p) => p.id === estado.perfilId);
 
+    const contexto = document.createElement('div');
+    contexto.className = 'resultado-contexto';
+    contexto.appendChild(criarCampoResultado('Agravo', agravo ? agravo.nome : 'Selecione um agravo'));
+    contexto.appendChild(criarCampoResultado('Perfil', perfil ? perfil.rotulo : 'Selecione um perfil'));
+    caixa.appendChild(contexto);
+
+    const conteudo = document.createElement('div');
+    conteudo.className = 'resultado-conteudo';
+    caixa.appendChild(conteudo);
+
     if (!agravo && !perfil) {
-      caixa.appendChild(criarLinha('p', 'Selecione um agravo e um perfil para ver o direcionamento.', 'estado'));
+      conteudo.appendChild(criarLinha('p', 'Selecione um agravo e um perfil para ver o direcionamento.', 'resultado-mensagem'));
       return;
     }
+
+    if (perfil && perfil.id === 'nao_profissional') {
+      const contato = document.createElement('section');
+      contato.className = 'resultado-contato';
+      contato.setAttribute('aria-labelledby', 'resultado-cievs-titulo');
+      contato.appendChild(criarLinha('p', 'Entre em contato com o', 'resultado-contato-rotulo'));
+      const tituloContato = criarLinha('h3', 'CIEVS Florianópolis', 'resultado-contato-titulo');
+      tituloContato.id = 'resultado-cievs-titulo';
+      contato.appendChild(tituloContato);
+
+      const acoes = document.createElement('div');
+      acoes.className = 'resultado-contato-acoes';
+      const telefone = document.createElement('a');
+      telefone.className = 'resultado-telefone';
+      telefone.href = 'tel:+5548933009983';
+      telefone.textContent = '+55 (48) 93300-9983';
+      telefone.setAttribute('aria-label', 'Ligar para CIEVS Florianópolis no número +55 (48) 93300-9983');
+      acoes.appendChild(telefone);
+
+      const ligar = document.createElement('a');
+      ligar.className = 'botao-ligar';
+      ligar.href = 'tel:+5548933009983';
+      ligar.appendChild(criarLinha('span', '☎', 'botao-ligar-icone'));
+      ligar.appendChild(document.createTextNode('Ligar agora'));
+      acoes.appendChild(ligar);
+      contato.appendChild(acoes);
+
+      const copiar = document.createElement('button');
+      copiar.className = 'botao-copiar';
+      copiar.type = 'button';
+      copiar.dataset.copiarTelefone = '+5548933009983';
+      copiar.textContent = 'Copiar número';
+      contato.appendChild(copiar);
+      contato.appendChild(criarLinha('p', '', 'resultado-status-copia'));
+      conteudo.appendChild(contato);
+      return;
+    }
+
     if (!agravo) {
-      caixa.appendChild(criarLinha('p', 'Falta selecionar o agravo.', 'estado'));
+      conteudo.appendChild(criarLinha('p', 'Falta selecionar o agravo.', 'resultado-mensagem'));
       return;
     }
     if (!perfil) {
-      caixa.appendChild(criarLinha('p', 'Falta selecionar o perfil.', 'estado'));
-      return;
-    }
-
-    caixa.appendChild(criarLinha('p', `Agravo: ${agravo.nome}`, 'estado'));
-    caixa.appendChild(criarLinha('p', `Perfil: ${perfil.rotulo}`, 'estado'));
-
-    if (perfil.id === 'nao_profissional') {
-      caixa.appendChild(criarLinha('h3', 'Direcionamento'));
-      const contato = document.createElement('p');
-      const telefone = document.createElement('a');
-      telefone.href = 'tel:+5548933009983';
-      telefone.textContent = 'CIEVS Florianópolis - +55 (48) 93300-9983';
-      contato.appendChild(telefone);
-      caixa.appendChild(contato);
+      conteudo.appendChild(criarLinha('p', 'Falta selecionar o perfil.', 'resultado-mensagem'));
       return;
     }
 
@@ -343,13 +385,15 @@
     const valido = dados && typeof dados.texto === 'string' && dados.texto.trim() !== '';
 
     if (!valido) {
-      caixa.appendChild(criarLinha('p', 'Não há direcionamento oficial confirmado para esta combinação.', 'estado'));
+      conteudo.appendChild(criarLinha('p', 'Não há direcionamento oficial confirmado para esta combinação.', 'resultado-mensagem'));
       return;
     }
 
-    caixa.appendChild(criarLinha('h3', dados.titulo || 'Direcionamento'));
-    caixa.appendChild(criarLinha('p', dados.texto));
-    if (dados.orgao) caixa.appendChild(criarLinha('p', `Órgão: ${dados.orgao}`, 'orgao'));
+    const painel = document.createElement('section');
+    painel.className = 'resultado-painel';
+    painel.appendChild(criarLinha('p', dados.titulo || 'Direcionamento', 'resultado-painel-titulo'));
+    painel.appendChild(criarLinha('p', dados.texto, 'resultado-painel-texto'));
+    if (dados.orgao) painel.appendChild(criarLinha('p', `Órgão: ${dados.orgao}`, 'resultado-painel-orgao'));
     // Somente links https são aceitos.
     if (typeof dados.link === 'string' && /^https:\/\//.test(dados.link)) {
       const p = document.createElement('p');
@@ -358,13 +402,31 @@
       a.rel = 'noopener noreferrer';
       a.textContent = 'Acessar a referência oficial';
       p.appendChild(a);
-      caixa.appendChild(p);
+      painel.appendChild(p);
     }
+    conteudo.appendChild(painel);
   }
 
   function configurarEventos() {
     window.addEventListener('resize', posicionarConceito);
     window.addEventListener('scroll', posicionarConceito, true);
+
+    $('#resultado').addEventListener('click', async (evento) => {
+      const botao = evento.target.closest('button[data-copiar-telefone]');
+      if (!botao) return;
+
+      const status = $('#resultado .resultado-status-copia');
+      try {
+        if (!navigator.clipboard || !navigator.clipboard.writeText) {
+          status.textContent = 'A cópia automática não está disponível neste navegador. Selecione o número para copiá-lo.';
+          return;
+        }
+        await navigator.clipboard.writeText(botao.dataset.copiarTelefone);
+        status.textContent = 'Número copiado.';
+      } catch (erro) {
+        status.textContent = 'Não foi possível copiar o número. Selecione o telefone e copie manualmente.';
+      }
+    });
 
     $('#busca').addEventListener('input', (evento) => {
       estado.termo = evento.target.value;
