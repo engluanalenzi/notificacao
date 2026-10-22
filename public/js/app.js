@@ -422,7 +422,7 @@
 
     if (
       perfil.id === 'nao_municipal'
-      && !/^15(?:-|$)/.test(agravo.grupoId || agravo.id)
+      && !/^1(?:-|$)/.test(agravo.grupoId || agravo.id)
     ) {
       const painel = document.createElement('section');
       painel.className = 'resultado-contato resultado-vigilancia';
