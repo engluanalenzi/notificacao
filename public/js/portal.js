@@ -3,6 +3,7 @@
 
   const aplicacao = document.querySelector('#aplicacao-notificacao');
   let observadorConteudo;
+  let observadorAlteracoes;
 
   function ajustarAlturaAplicacao() {
     const documento = aplicacao.contentDocument;
@@ -20,9 +21,18 @@
 
   aplicacao.addEventListener('load', () => {
     const documento = aplicacao.contentDocument;
-    if (!documento) return;
+    if (!documento || !documento.body) return;
 
     ajustarAlturaAplicacao();
+    if (window.MutationObserver) {
+      observadorAlteracoes?.disconnect();
+      observadorAlteracoes = new window.MutationObserver(ajustarAlturaAplicacao);
+      observadorAlteracoes.observe(documento.body, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+    }
     if (window.ResizeObserver) {
       observadorConteudo?.disconnect();
       observadorConteudo = new window.ResizeObserver(ajustarAlturaAplicacao);
