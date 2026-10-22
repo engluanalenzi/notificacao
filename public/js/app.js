@@ -335,6 +335,29 @@
       return;
     }
 
+    if (perfil && perfil.id === 'municipal') {
+      const painel = document.createElement('section');
+      painel.className = 'resultado-contato resultado-celk';
+      painel.setAttribute('aria-labelledby', 'resultado-celk-titulo');
+      painel.appendChild(criarLinha('p', 'Acesse o sistema de registro de agravos', 'resultado-contato-rotulo'));
+      const tituloCelk = criarLinha('h3', 'Celk Saúde', 'resultado-contato-titulo');
+      tituloCelk.id = 'resultado-celk-titulo';
+      painel.appendChild(tituloCelk);
+
+      const linkCelk = document.createElement('a');
+      linkCelk.className = 'botao-celk';
+      linkCelk.href = 'https://florianopolis.celk.com.br/vigilancia/registroagravo/consultaRegistroAgravo?4&cdPrg=545';
+      linkCelk.target = '_blank';
+      linkCelk.rel = 'noopener noreferrer';
+      linkCelk.appendChild(document.createTextNode('Acessar Celk Saúde'));
+      const iconeCelk = criarLinha('span', '↗', 'botao-celk-icone');
+      iconeCelk.setAttribute('aria-hidden', 'true');
+      linkCelk.appendChild(iconeCelk);
+      painel.appendChild(linkCelk);
+      conteudo.appendChild(painel);
+      return;
+    }
+
     if (perfil && perfil.id === 'nao_profissional') {
       const contato = document.createElement('section');
       contato.className = 'resultado-contato';
@@ -378,6 +401,36 @@
     }
     if (!perfil) {
       conteudo.appendChild(criarLinha('p', 'Falta selecionar o perfil.', 'resultado-mensagem'));
+      return;
+    }
+
+    if (
+      perfil.id === 'nao_municipal'
+      && !/^15(?:-|$)/.test(agravo.grupoId || agravo.id)
+    ) {
+      const painel = document.createElement('section');
+      painel.className = 'resultado-contato resultado-vigilancia';
+      painel.setAttribute('aria-labelledby', 'resultado-vigilancia-titulo');
+      painel.appendChild(criarLinha('p', 'Acesse o site da', 'resultado-contato-rotulo'));
+      const tituloVigilancia = criarLinha(
+        'h3',
+        'Vigilância Epidemiológica',
+        'resultado-contato-titulo'
+      );
+      tituloVigilancia.id = 'resultado-vigilancia-titulo';
+      painel.appendChild(tituloVigilancia);
+
+      const linkVigilancia = document.createElement('a');
+      linkVigilancia.className = 'botao-celk';
+      linkVigilancia.href = 'https://sites.google.com/view/gerve/notifica%C3%A7%C3%A3o-compuls%C3%B3ria';
+      linkVigilancia.target = '_blank';
+      linkVigilancia.rel = 'noopener noreferrer';
+      linkVigilancia.appendChild(document.createTextNode('Acessar Vigilância Epidemiológica'));
+      const iconeVigilancia = criarLinha('span', '↗', 'botao-celk-icone');
+      iconeVigilancia.setAttribute('aria-hidden', 'true');
+      linkVigilancia.appendChild(iconeVigilancia);
+      painel.appendChild(linkVigilancia);
+      conteudo.appendChild(painel);
       return;
     }
 
