@@ -3,9 +3,21 @@
 
   // Perfis definidos pelo usuário. Não alterar sem nova validação.
   const PERFIS = [
-    { id: 'municipal', rotulo: 'Profissional de saúde da rede municipal de Florianópolis' },
-    { id: 'nao_municipal', rotulo: 'Profissional de saúde externo à rede municipal' },
-    { id: 'nao_profissional', rotulo: 'Pessoa sem vínculo profissional com a área da saúde' }
+    {
+      id: 'municipal',
+      rotulo: 'Profissional de saúde da rede municipal de Florianópolis',
+      descricao: 'Rede municipal de Florianópolis'
+    },
+    {
+      id: 'nao_municipal',
+      rotulo: 'Profissional de saúde externo à rede municipal',
+      descricao: 'Outros serviços e municípios'
+    },
+    {
+      id: 'nao_profissional',
+      rotulo: 'Pessoa sem vínculo profissional com a área da saúde',
+      descricao: 'Cidadão em geral'
+    }
   ];
 
   const TOTAL_PREVISTO = 60;
@@ -290,9 +302,17 @@
       radio.value = perfil.id;
       radio.id = `perfil-${perfil.id}`;
       const texto = document.createElement('span');
-      texto.textContent = perfil.rotulo;
+      texto.className = 'opcao-texto';
+      const titulo = document.createElement('strong');
+      titulo.className = 'opcao-titulo';
+      titulo.textContent = perfil.rotulo;
+      const descricao = document.createElement('small');
+      descricao.className = 'opcao-descricao';
+      descricao.textContent = perfil.descricao;
       rotulo.setAttribute('for', radio.id);
       rotulo.appendChild(radio);
+      texto.appendChild(titulo);
+      texto.appendChild(descricao);
       rotulo.appendChild(texto);
       container.appendChild(rotulo);
     });
