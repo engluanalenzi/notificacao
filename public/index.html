@@ -5,56 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <title>Direcionamento de notificações compulsórias em saúde (DEMONSTRAÇÃO)</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <title>Notificações compulsórias — Demonstração</title>
+  <link rel="stylesheet" href="css/portal.css?v=20261022-logo-unico">
 </head>
 <body>
-  <a class="pular" href="#principal">Pular para o conteúdo</a>
-
-  <header class="topo">
-    <div class="wrap">
-      <p class="marca">Vigilância em Saúde · Demonstração</p>
-    </div>
+  <header class="portal-capa" aria-label="Identificação institucional">
+    <img src="images/logo-prefeitura-saude-dvs.png" alt="Prefeitura de Florianópolis Saúde e Diretoria de Vigilância em Saúde — DVS Floripa">
   </header>
 
-  <div class="aviso" role="note">
-    <div class="wrap">
-      <strong>Aviso:</strong> Site não oficial, destinado exclusivamente a fins demonstrativos.
-    </div>
-  </div>
-
-  <main id="principal" class="wrap">
-    <h1>Notificações compulsórias: direcionamento</h1>
-    <p>Busque e selecione um agravo, depois escolha o perfil. O direcionamento aparece somente quando houver conteúdo oficial confirmado.</p>
-
-    <section aria-labelledby="h-agravo">
-      <h2 id="h-agravo">1. Escolha o agravo</h2>
-      <label for="busca">Buscar agravo pelo nome</label>
-      <input id="busca" type="search" autocomplete="off" aria-describedby="busca-status">
-      <p id="busca-status" role="status"></p>
-      <ul id="lista-agravos" class="lista-agravos" aria-label="Lista de agravos"></ul>
-    </section>
-
-    <section aria-labelledby="h-perfil">
-      <h2 id="h-perfil">2. Escolha o perfil</h2>
-      <fieldset>
-        <legend>Quem está consultando?</legend>
-        <div id="perfis"></div>
-      </fieldset>
-    </section>
-
-    <section aria-labelledby="h-resultado">
-      <h2 id="h-resultado">3. Direcionamento</h2>
-      <div id="resultado" class="resultado" aria-live="polite"></div>
-    </section>
+  <main id="conteudo" class="portal-conteudo" tabindex="-1">
+    <iframe
+      id="aplicacao-notificacao"
+      class="portal-aplicacao"
+      title="Aplicação de Notificação Compulsória"
+      src="notificacao.html?v=20261022-exigir-agravo"
+      scrolling="no"></iframe>
   </main>
 
-  <footer class="rodape">
-    <div class="wrap">
-      <p>Demonstração técnica. Conteúdo, órgãos e links devem ser validados pela equipe responsável antes de qualquer uso público.</p>
-    </div>
+  <footer class="portal-rodape">
+    <p>Desenvolvido por Luana Lenzi</p>
   </footer>
 
-  <script src="js/app.js" defer></script>
+  <script src="js/portal.js?v=20261022-observar-mutacoes" defer></script>
 </body>
 </html>

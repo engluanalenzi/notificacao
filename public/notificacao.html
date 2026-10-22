@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Notificação Compulsória — Vigilância em Saúde (DEMONSTRAÇÃO)</title>
+  <link rel="stylesheet" href="css/styles.css?v=20261022-direcionamento-azul">
+</head>
+<body>
+  <a class="pular" href="#principal">Pular para o conteúdo</a>
+
+  <div class="aviso" role="note">
+    <div class="wrap">
+      <strong>Aviso:</strong> Site não oficial, destinado exclusivamente a fins demonstrativos.
+    </div>
+  </div>
+
+  <main id="principal" class="wrap">
+    <div class="introducao">
+      <p class="sobretitulo">Consulta de direcionamento</p>
+      <h1>Notificações compulsórias</h1>
+      <p>Encontre um agravo e selecione seu perfil para consultar o direcionamento disponível.</p>
+    </div>
+
+    <section aria-labelledby="h-agravo">
+      <h2 id="h-agravo"><span class="etapa" aria-hidden="true">01</span> Escolha o agravo</h2>
+      <label for="busca">Buscar agravo pelo nome</label>
+      <input id="busca" type="search" autocomplete="off" aria-describedby="busca-status">
+      <p id="busca-status" role="status"></p>
+      <ul id="lista-agravos" class="lista-agravos" aria-label="Lista de agravos"></ul>
+      <div id="conceito-agravo" class="conceito-agravo" role="tooltip" hidden></div>
+    </section>
+
+    <section aria-labelledby="h-perfil">
+      <h2 id="h-perfil"><span class="etapa" aria-hidden="true">02</span> Escolha o perfil</h2>
+      <fieldset>
+        <legend>Quem está consultando?</legend>
+        <div id="perfis"></div>
+      </fieldset>
+    </section>
+
+    <section aria-labelledby="h-resultado">
+      <h2 id="h-resultado"><span class="etapa" aria-hidden="true">03</span> Direcionamento</h2>
+      <div id="resultado" class="resultado" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="wrap">
+      <p>Demonstração técnica. Conteúdo, órgãos e links devem ser validados pela equipe responsável antes de qualquer uso público.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js?v=20261022-exigir-agravo" defer></script>
+</body>
+</html>
