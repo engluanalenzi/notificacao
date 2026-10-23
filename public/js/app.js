@@ -385,7 +385,7 @@
 
     const item1 = /^1(?:-|$)/.test(agravo.grupoId || agravo.id);
 
-    if (perfil && perfil.id === 'nao_profissional') {
+    if (perfil.id === 'nao_profissional') {
       const contato = document.createElement('section');
       contato.className = 'resultado-contato';
       contato.setAttribute('aria-labelledby', 'resultado-cievs-titulo');
@@ -422,7 +422,7 @@
       return;
     }
 
-    if (perfil && perfil.id !== 'municipal' && item1) {
+    if (perfil.id === 'nao_municipal' && item1) {
       const painel = document.createElement('section');
       painel.className = 'resultado-painel';
       painel.appendChild(criarLinha('p', 'Direcionamento para agravos do item 1', 'resultado-painel-titulo'));
@@ -431,10 +431,7 @@
       return;
     }
 
-    if (
-      perfil.id === 'nao_municipal'
-      && !item1
-    ) {
+    if (perfil.id === 'nao_municipal' && !item1) {
       const painel = document.createElement('section');
       painel.className = 'resultado-contato resultado-vigilancia';
       painel.setAttribute('aria-labelledby', 'resultado-vigilancia-titulo');
