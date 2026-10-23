@@ -385,15 +385,6 @@
 
     const item1 = /^1(?:-|$)/.test(agravo.grupoId || agravo.id);
 
-    if (perfil && perfil.id !== 'municipal' && item1) {
-      const painel = document.createElement('section');
-      painel.className = 'resultado-painel';
-      painel.appendChild(criarLinha('p', 'Direcionamento para agravos do item 1', 'resultado-painel-titulo'));
-      painel.appendChild(criarLinha('p', "Preencha os dados a partir do link 'xxxxxxxxxxxxxxxxxxxxxxxx'.\nSe você estiver em Hospital com Núcleo de Vigilância Hospitalar, comunique-o imediatamente:\n          Hospital Florianópolis – (48) 3380-8700\n          Hospital Governador Celso Ramos –  (48) 3664-3600\n          Hospital Infantil Joana de Gusmão – (48) 3664-3200\n          Hospital Nereu Ramos – (48) 3665-9401\n          Hospital Universitário – (48) 3721-2067", 'resultado-painel-texto'));
-      conteudo.appendChild(painel);
-      return;
-    }
-
     if (perfil && perfil.id === 'nao_profissional') {
       const contato = document.createElement('section');
       contato.className = 'resultado-contato';
@@ -428,6 +419,15 @@
       contato.appendChild(copiar);
       contato.appendChild(criarLinha('p', '', 'resultado-status-copia'));
       conteudo.appendChild(contato);
+      return;
+    }
+
+    if (perfil && perfil.id !== 'municipal' && item1) {
+      const painel = document.createElement('section');
+      painel.className = 'resultado-painel';
+      painel.appendChild(criarLinha('p', 'Direcionamento para agravos do item 1', 'resultado-painel-titulo'));
+      painel.appendChild(criarLinha('p', "Preencha os dados a partir do link 'xxxxxxxxxxxxxxxxxxxxxxxx'.\nSe você estiver em Hospital com Núcleo de Vigilância Hospitalar, comunique-o imediatamente:\n          Hospital Florianópolis – (48) 3380-8700\n          Hospital Governador Celso Ramos –  (48) 3664-3600\n          Hospital Infantil Joana de Gusmão – (48) 3664-3200\n          Hospital Nereu Ramos – (48) 3665-9401\n          Hospital Universitário – (48) 3721-2067", 'resultado-painel-texto'));
+      conteudo.appendChild(painel);
       return;
     }
 
