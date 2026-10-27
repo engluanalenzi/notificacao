@@ -167,11 +167,10 @@ const isDone = n === 7;
 bottomBar.style.display = isDone ? 'none' : 'block';
 counter.textContent = isDone ? 'Concluído' : 'Tela ' + n + ' de ' + TOTAL;
 btnVoltar.style.visibility = n === 1 ? 'hidden' : 'visible';
-btnContinuar.textContent = n === TOTAL ? 'Concluir notificação' : 'Continuar →';
+btnContinuar.textContent = n === TOTAL ? 'Concluir notificação' : 'Seguinte';
 renderProgress();
 save();
 area.scrollTop = 0;
-window.scrollTo({ top: 0, behavior: 'smooth' });
 if (isDone) buildSummary();
 }
 
@@ -339,11 +338,11 @@ restoreInputs();
 
 root.querySelector('#tempoUnidade').value = state.values.tempoUnidade || 'Anos';
 root.querySelector('#dataFechamento').value = state.values.dataFechamento || today;
-showScreen(state.screen >= 1 && state.screen <= 7 ? state.screen : 1);
+showScreen(1);
 const activeHeading = root.querySelector('.screen.active h1');
 if (activeHeading) {
   activeHeading.tabIndex = -1;
-  activeHeading.focus();
+  activeHeading.focus({ preventScroll: true });
 }
 return root;
 };
