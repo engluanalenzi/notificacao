@@ -29,6 +29,7 @@
     perfilId: null,
     termo: ''
   };
+  let formularioAcidenteAberto = false;
 
   const $ = (seletor) => document.querySelector(seletor);
 
@@ -340,6 +341,22 @@
     const agravo = estado.agravos.find((a) => a.id === estado.agravoId);
     const perfil = PERFIS.find((p) => p.id === estado.perfilId);
 
+    const acidenteDeTrabalho = agravo && agravo.id === '1-a-acidente-de-trabalho';
+    if (perfil && perfil.id === 'nao_municipal' && acidenteDeTrabalho && formularioAcidenteAberto) {
+      document.body.classList.add('modo-formulario-acidente');
+      window.montarFormularioAcidente(caixa, () => {
+        formularioAcidenteAberto = false;
+        document.body.classList.remove('modo-formulario-acidente');
+        renderizarResultado();
+        const botoesAgravos = $('#lista-agravos').querySelectorAll('button[data-id]');
+        const botaoSelecionado = Array.from(botoesAgravos).find((botao) => botao.dataset.id === estado.agravoId);
+        if (botaoSelecionado) botaoSelecionado.focus();
+      });
+      return;
+    }
+
+    document.body.classList.remove('modo-formulario-acidente');
+
     const contexto = document.createElement('div');
     contexto.className = 'resultado-contexto';
     contexto.appendChild(criarCampoResultado('Agravo', agravo ? agravo.nome : 'Selecione um agravo'));
@@ -384,7 +401,6 @@
     }
 
     const item1 = /^1(?:-|$)/.test(agravo.grupoId || agravo.id);
-
     if (perfil.id === 'nao_profissional') {
       const contato = document.createElement('section');
       contato.className = 'resultado-contato';
@@ -422,11 +438,19 @@
       return;
     }
 
-    if (perfil.id === 'nao_municipal' && item1) {
+    if (perfil.id === 'nao_municipal' && acidenteDeTrabalho) {
       const painel = document.createElement('section');
       painel.className = 'resultado-painel';
-      painel.appendChild(criarLinha('p', 'Direcionamento para agravos do item 1', 'resultado-painel-titulo'));
-      painel.appendChild(criarLinha('p', "Preencha os dados a partir do link 'xxxxxxxxxxxxxxxxxxxxxxxx'.\nSe você estiver em Hospital com Núcleo de Vigilância Hospitalar, comunique-o imediatamente:\n          Hospital Florianópolis – (48) 3380-8700\n          Hospital Governador Celso Ramos –  (48) 3664-3600\n          Hospital Infantil Joana de Gusmão – (48) 3664-3200\n          Hospital Nereu Ramos – (48) 3665-9401\n          Hospital Universitário – (48) 3721-2067", 'resultado-painel-texto'));
+      painel.appendChild(criarLinha('p', 'Direcionamento para 1.a - Acidente de trabalho', 'resultado-painel-titulo'));
+      painel.appendChild(criarLinha('p', 'O formulário demonstrativo está disponível nesta página. Os dados não são enviados à Vigilância Epidemiológica.', 'resultado-painel-texto'));
+      const botaoFormulario = document.createElement('button');
+      botaoFormulario.type = 'button';
+      botaoFormulario.className = 'botao-celk';
+      botaoFormulario.dataset.formAcidente = 'abrir';
+      botaoFormulario.textContent = 'Abrir formulário';
+      painel.appendChild(botaoFormulario);
+
+      painel.appendChild(criarLinha('p', 'Se você estiver em Hospital com Núcleo de Vigilância Hospitalar, comunique-o imediatamente:\nHospital Florianópolis – (48) 3380-8700\nHospital Governador Celso Ramos – (48) 3664-3600\nHospital Infantil Joana de Gusmão – (48) 3664-3200\nHospital Nereu Ramos – (48) 3665-9401\nHospital Universitário – (48) 3721-2067', 'resultado-painel-texto'));
       conteudo.appendChild(painel);
       return;
     }
@@ -489,6 +513,13 @@
     window.addEventListener('scroll', posicionarConceito, true);
 
     $('#resultado').addEventListener('click', async (evento) => {
+      const botaoFormulario = evento.target.closest('button[data-form-acidente]');
+      if (botaoFormulario) {
+        formularioAcidenteAberto = true;
+        renderizarResultado();
+        return;
+      }
+
       const botao = evento.target.closest('button[data-copiar-telefone]');
       if (!botao) return;
 
@@ -514,6 +545,7 @@
       const botao = evento.target.closest('button[data-id]');
       if (!botao) return;
       estado.agravoId = botao.dataset.id;
+      formularioAcidenteAberto = false;
       renderizarListaAgravos();
       renderizarResultado();
     });
@@ -521,6 +553,7 @@
     $('#perfis').addEventListener('change', (evento) => {
       if (evento.target.name === 'perfil') {
         estado.perfilId = evento.target.value;
+        formularioAcidenteAberto = false;
         renderizarResultado();
       }
     });
