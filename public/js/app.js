@@ -22,6 +22,39 @@
 
   const TOTAL_PREVISTO = 60;
 
+  const hojeIso = new Date().toISOString().slice(0, 10);
+
+  const FORMULARIOS_INLINE = {
+    '1-a-acidente-de-trabalho': {
+      titulo: '1.a - Acidente de trabalho',
+      montar: (caixa, voltar) => window.montarFormularioAcidente(caixa, voltar)
+    },
+    '1-b-acidente-de-trabalho-com-exposicao-a-material-biologico': {
+      titulo: '1.b - Acidente de trabalho com exposição a material biológico',
+      montar: (caixa, voltar) => window.montarFormulario(caixa, voltar, {
+        templateId: 'form-biologico-template',
+        storageKey: 'notificacao-biologico-v1-inline',
+        total: 8,
+        defaults: { tipoNotif: 'Individual', idadeUnidade: 'Ano', tempoUnidade: 'Ano', dataNotificacao: hojeIso }
+      })
+    },
+    '1-c-cancer-relacionado-ao-trabalho': {
+      titulo: '1.c - Câncer relacionado ao trabalho',
+      montar: (caixa, voltar) => window.montarFormulario(caixa, voltar, {
+        templateId: 'form-cancer-template',
+        storageKey: 'notificacao-cancer-v1-inline',
+        total: 8,
+        defaults: {
+          dataNotificacao: hojeIso,
+          data: hojeIso,
+          tempoOcupacaoUn: 'Ano',
+          tempoExposicaoUn: 'Ano',
+          tempoTabacoUn: 'Ano'
+        }
+      })
+    }
+  };
+
   const estado = {
     agravos: [],
     direcionamentos: {},
@@ -341,10 +374,10 @@
     const agravo = estado.agravos.find((a) => a.id === estado.agravoId);
     const perfil = PERFIS.find((p) => p.id === estado.perfilId);
 
-    const acidenteDeTrabalho = agravo && agravo.id === '1-a-acidente-de-trabalho';
-    if (perfil && perfil.id === 'nao_municipal' && acidenteDeTrabalho && formularioAcidenteAberto) {
+    const formularioInline = agravo && FORMULARIOS_INLINE[agravo.id];
+    if (perfil && perfil.id === 'nao_municipal' && formularioInline && formularioAcidenteAberto) {
       document.body.classList.add('modo-formulario-acidente');
-      window.montarFormularioAcidente(caixa, () => {
+      formularioInline.montar(caixa, () => {
         formularioAcidenteAberto = false;
         document.body.classList.remove('modo-formulario-acidente');
         renderizarResultado();
@@ -438,19 +471,29 @@
       return;
     }
 
-    if (perfil.id === 'nao_municipal' && acidenteDeTrabalho) {
+    if (perfil.id === 'nao_municipal' && agravo.grupoId === '1-doencas-relacionadas-ao-trabalho') {
       const painel = document.createElement('section');
       painel.className = 'resultado-painel';
-      painel.appendChild(criarLinha('p', 'Direcionamento para 1.a - Acidente de trabalho', 'resultado-painel-titulo'));
-      painel.appendChild(criarLinha('p', 'O formulário demonstrativo está disponível nesta página. Os dados não são enviados à Vigilância Epidemiológica.', 'resultado-painel-texto'));
-      const botaoFormulario = document.createElement('button');
-      botaoFormulario.type = 'button';
-      botaoFormulario.className = 'botao-celk';
-      botaoFormulario.dataset.formAcidente = 'abrir';
-      botaoFormulario.textContent = 'Abrir formulário';
-      painel.appendChild(botaoFormulario);
-
-      painel.appendChild(criarLinha('p', 'Se você estiver em Hospital com Núcleo de Vigilância Hospitalar, comunique-o imediatamente:\nHospital Florianópolis – (48) 3380-8700\nHospital Governador Celso Ramos – (48) 3664-3600\nHospital Infantil Joana de Gusmão – (48) 3664-3200\nHospital Nereu Ramos – (48) 3665-9401\nHospital Universitário – (48) 3721-2067', 'resultado-painel-texto'));
+      painel.appendChild(criarLinha('p', `Direcionamento para ${agravo.nome}`, 'resultado-painel-titulo'));
+      const instrucao = document.createElement('p');
+      instrucao.className = 'resultado-painel-texto';
+      instrucao.append(document.createTextNode('Para registrar a notificação, preencha o formulário abaixo. Ao concluir, baixe o arquivo em PDF e encaminhe-o para o e-mail '));
+      const email = document.createElement('a');
+      email.href = 'mailto:saudetrab.sms@floripa.sc.gov.br';
+      email.textContent = 'saudetrab.sms@floripa.sc.gov.br';
+      instrucao.append(email, document.createTextNode('.'));
+      painel.appendChild(instrucao);
+      if (formularioInline) {
+        const botaoFormulario = document.createElement('button');
+        botaoFormulario.type = 'button';
+        botaoFormulario.className = 'botao-celk';
+        botaoFormulario.dataset.formAcidente = 'abrir';
+        botaoFormulario.textContent = 'Abrir formulário';
+        painel.appendChild(botaoFormulario);
+        if (agravo.id === '1-a-acidente-de-trabalho') {
+          painel.appendChild(criarLinha('p', 'Se você estiver em Hospital com Núcleo de Vigilância Hospitalar, comunique-o imediatamente:\nHospital Florianópolis – (48) 3380-8700\nHospital Governador Celso Ramos – (48) 3664-3600\nHospital Infantil Joana de Gusmão – (48) 3664-3200\nHospital Nereu Ramos – (48) 3665-9401\nHospital Universitário – (48) 3721-2067', 'resultado-painel-texto'));
+        }
+      }
       conteudo.appendChild(painel);
       return;
     }
@@ -515,8 +558,18 @@
     $('#resultado').addEventListener('click', async (evento) => {
       const botaoFormulario = evento.target.closest('button[data-form-acidente]');
       if (botaoFormulario) {
-        formularioAcidenteAberto = true;
-        renderizarResultado();
+        carregarFormulariosInline()
+          .then(() => {
+            formularioAcidenteAberto = true;
+            renderizarResultado();
+          })
+          .catch(() => {
+            $('#resultado .resultado-conteudo').textContent = '';
+            const aviso = document.createElement('p');
+            aviso.className = 'resultado-mensagem';
+            aviso.textContent = 'Não foi possível abrir o formulário. Atualize a página e tente novamente.';
+            $('#resultado').appendChild(aviso);
+          });
         return;
       }
 
@@ -557,6 +610,31 @@
         renderizarResultado();
       }
     });
+  }
+
+  let formulariosExtraProntos = null;
+
+  function carregarFormulariosInline() {
+    if (document.getElementById('form-biologico-template') && document.getElementById('form-cancer-template')) {
+      return Promise.resolve();
+    }
+    if (!formulariosExtraProntos) {
+      formulariosExtraProntos = fetch('formularios-inline.html', { cache: 'no-store', credentials: 'omit' })
+        .then((resposta) => {
+          if (!resposta.ok) throw new Error('Falha ao carregar os formulários.');
+          return resposta.text();
+        })
+        .then((html) => {
+          const suporte = document.createElement('div');
+          suporte.innerHTML = html;
+          document.body.append(suporte);
+        })
+        .catch((erro) => {
+          formulariosExtraProntos = null;
+          throw erro;
+        });
+    }
+    return formulariosExtraProntos;
   }
 
   async function iniciar() {

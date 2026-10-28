@@ -1,10 +1,20 @@
 window.montarFormularioAcidente = function montarFormularioAcidente(container, onVoltar) {
-const template = document.getElementById('form-acidente-template');
-if (!template) throw new Error('Modelo do formulario de acidente nao encontrado.');
+  return window.montarFormulario(container, onVoltar, {
+    templateId: 'form-acidente-template',
+    storageKey: 'notificacao-acidente-v1-inline',
+    total: 6,
+    defaults: { tempoUnidade: 'Anos' }
+  });
+};
+
+window.montarFormulario = function montarFormulario(container, onVoltar, options) {
+const template = document.getElementById(options.templateId);
+if (!template) throw new Error('Modelo do formulario nao encontrado.');
 container.replaceChildren(template.content.cloneNode(true));
 const root = container.querySelector('.acidente-inline');
-const TOTAL = 6;
-const STORAGE_KEY = 'notificacao-acidente-v1-inline';
+const TOTAL = options.total;
+const STORAGE_KEY = options.storageKey;
+const defaults = options.defaults || {};
 const defaultState = () => ({ screen: 1, values: {}, calcManual: false });
 const status = root.querySelector('#form-status');
 const setStatus = (message) => { status.textContent = message; };
@@ -21,8 +31,12 @@ if (!state.values) state.values = {};
 if (!state.screen) state.screen = 1;
 
 const today = new Date().toISOString().slice(0, 10);
-if (!state.values.dataFechamento) state.values.dataFechamento = today;
-if (!state.values.tempoUnidade) state.values.tempoUnidade = 'Anos';
+Object.entries(defaults).forEach(([key, value]) => {
+  if (!state.values[key]) state.values[key] = value;
+});
+if (root.querySelector('[data-key="dataFechamento"]') && !state.values.dataFechamento) {
+  state.values.dataFechamento = today;
+}
 
 const area = root.querySelector('#mainArea');
 const counter = root.querySelector('#stepCounter');
@@ -53,6 +67,7 @@ const selected = Array.from(group.querySelectorAll('.chip.selected')).map(c => c
 if (group.dataset.multi) state.values[key] = selected;
 else state.values[key] = selected[0] || '';
 });
+aplicarCondicoes();
 save();
 }
 
@@ -69,6 +84,23 @@ const on = group.dataset.multi ? Array.isArray(v) && v.includes(chip.dataset.val
 chip.classList.toggle('selected', !!on);
 });
 });
+aplicarCondicoes();
+}
+
+function aplicarCondicoes() {
+  root.querySelectorAll('[data-show-when]').forEach((el) => {
+    const separador = el.dataset.showWhen.indexOf('=');
+    const key = el.dataset.showWhen.slice(0, separador);
+    const esperado = el.dataset.showWhen.slice(separador + 1);
+    el.hidden = state.values[key] !== esperado;
+  });
+  root.querySelectorAll('[data-show-includes]').forEach((el) => {
+    const separador = el.dataset.showIncludes.indexOf('=');
+    const key = el.dataset.showIncludes.slice(0, separador);
+    const esperado = el.dataset.showIncludes.slice(separador + 1);
+    const valor = state.values[key];
+    el.hidden = !(Array.isArray(valor) && valor.includes(esperado));
+  });
 }
 
 
@@ -106,24 +138,27 @@ persistInputs();
 });
 
 // Masks
-const cpfEl = root.querySelector('#cpf');
-cpfEl.addEventListener('input', () => {
-const d = cpfEl.value.replace(/\D/g, '').slice(0, 11);
-cpfEl.value = d.replace(/^(\d{3})(\d{0,3})(\d{0,3})(\d{0,2}).*/, (m, a, b, c, e) =>
-[a, b, c].filter(Boolean).join('.') + (e ? '-' + e : ''));
-});
-const cnpjEl = root.querySelector('#cnpj');
-cnpjEl.addEventListener('input', () => {
-let d = cnpjEl.value.replace(/\D/g, '');
-if (d.length <= 11) {
-d = d.slice(0, 11);
-cnpjEl.value = d.replace(/^(\d{3})(\d{0,3})(\d{0,3})(\d{0,2}).*/, (m, a, b, c, e) =>
-[a, b, c].filter(Boolean).join('.') + (e ? '-' + e : ''));
-} else {
-d = d.slice(0, 14);
-cnpjEl.value = d.replace(/^(\d{2})(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2}).*/, (m, a, b, c, e, f) =>
-[a, b, c].filter(Boolean).join('.') + (e ? '/' + e : '') + (f ? '-' + f : ''));
+function mascaraCpf(valor) {
+  const d = String(valor).replace(/\D/g, '').slice(0, 11);
+  return d.replace(/^(\d{3})(\d{0,3})(\d{0,3})(\d{0,2}).*/, (m, a, b, c, e) =>
+    [a, b, c].filter(Boolean).join('.') + (e ? '-' + e : ''));
 }
+function mascaraCnpjOuCpf(valor) {
+  let d = String(valor).replace(/\D/g, '');
+  if (d.length <= 11) return mascaraCpf(d);
+  d = d.slice(0, 14);
+  return d.replace(/^(\d{2})(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2}).*/, (m, a, b, c, e, f) =>
+    [a, b, c].filter(Boolean).join('.') + (e ? '/' + e : '') + (f ? '-' + f : ''));
+}
+root.querySelectorAll('[data-mask="cpf"], #cpf').forEach((campo) => {
+  campo.addEventListener('input', () => {
+    campo.value = mascaraCpf(campo.value);
+  });
+});
+root.querySelectorAll('[data-mask="cnpj"], #cnpj').forEach((campo) => {
+  campo.addEventListener('input', () => {
+    campo.value = mascaraCnpjOuCpf(campo.value);
+  });
 });
 
 function clearErrorFor(key) {
@@ -163,7 +198,7 @@ seg.classList.toggle('done', i < state.screen);
 function showScreen(n) {
 state.screen = n;
 getScreens().forEach(s => s.classList.toggle('active', Number(s.dataset.screen) === n));
-const isDone = n === 7;
+const isDone = n === TOTAL + 1;
 bottomBar.style.display = isDone ? 'none' : 'block';
 counter.textContent = isDone ? 'Concluído' : 'Tela ' + n + ' de ' + TOTAL;
 btnVoltar.style.visibility = n === 1 ? 'hidden' : 'visible';
@@ -267,15 +302,34 @@ buildPrint();
 window.print();
 });
 
+function rotuloResumo(el) {
+  return el.dataset.summary;
+}
+
+function valorResumo(el) {
+  const key = el.dataset.key || el.dataset.chips;
+  let valor = state.values[key];
+  if (Array.isArray(valor)) return valor.join('; ');
+  if (el.type === 'date' && valor) return formatDate(valor);
+  if (el.classList && el.classList.contains('unit-row')) {
+    const quantidade = el.querySelector('input[data-key]');
+    const unidade = el.querySelector('select[data-key]');
+    return quantidade && quantidade.value ? `${quantidade.value} ${unidade.value}` : '';
+  }
+  return valor || '';
+}
+
 function buildSummary() {
-const v = state.values;
-const items = [
-['Nome', v.nome],
-['Data do acidente', v.dataAcidente ? formatDate(v.dataAcidente) : ''],
-['Tipo de acidente', v.tipoAcidente],
-['Parte do corpo', v.parteCorpo],
-['Evolução', v.evolucao],
-['CAT emitida', v.cat]
+const marcados = root.querySelectorAll('[data-summary]');
+const items = marcados.length
+  ? Array.from(marcados).map((el) => [rotuloResumo(el), valorResumo(el)])
+  : [
+['Nome', state.values.nome],
+['Data do acidente', state.values.dataAcidente ? formatDate(state.values.dataAcidente) : ''],
+['Tipo de acidente', state.values.tipoAcidente],
+['Parte do corpo', state.values.parteCorpo],
+['Evolução', state.values.evolucao],
+['CAT emitida', state.values.cat]
 ];
 root.querySelector('#summaryGrid').innerHTML = items.map(([k, val]) =>
 '<div class="summary-item"><span>' + k + '</span><strong>' + escapeHtml(val || '—') + '</strong></div>'
@@ -300,7 +354,7 @@ persistInputs();
 if (state.screen < TOTAL) {
 showScreen(state.screen + 1);
 } else {
-showScreen(7);
+showScreen(TOTAL + 1);
 }
 });
 
@@ -313,11 +367,13 @@ root.querySelector('[data-dialog-close]').addEventListener('click', () => dlg.cl
 root.querySelector('[data-voltar-consulta]').addEventListener('click', onVoltar);
 root.querySelector('#btnNova').addEventListener('click', () => dlg.showModal());
 root.querySelector('#btnConfirmaNova').addEventListener('click', () => {
-state = { screen: 1, values: { dataFechamento: today, tempoUnidade: 'Anos' }, calcManual: false };
+state = { screen: 1, values: { ...defaults }, calcManual: false };
+if (root.querySelector('[data-key="dataFechamento"]')) state.values.dataFechamento = today;
 save();
-root.querySelectorAll('[data-key]').forEach(el => { el.value = ''; el.classList.remove('invalid'); });
-root.querySelector('#tempoUnidade').value = 'Anos';
-root.querySelector('#dataFechamento').value = today;
+root.querySelectorAll('[data-key]').forEach(el => {
+  el.value = state.values[el.dataset.key] || '';
+  el.classList.remove('invalid');
+});
 root.querySelectorAll('.chip.selected').forEach(c => c.classList.remove('selected'));
 root.querySelectorAll('.field-error').forEach(e => e.classList.remove('show'));
 dlg.close();
@@ -327,9 +383,6 @@ setStatus('Novo formulario pronto para preenchimento.');
 
 // Init
 restoreInputs();
-
-root.querySelector('#tempoUnidade').value = state.values.tempoUnidade || 'Anos';
-root.querySelector('#dataFechamento').value = state.values.dataFechamento || today;
 showScreen(1);
 const activeHeading = root.querySelector('.screen.active h1');
 if (activeHeading) {

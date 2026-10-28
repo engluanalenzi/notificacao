@@ -346,7 +346,7 @@ color: #000;
 .form-app .hospital-alert { border-color: #d8e3ed; background: #e8f3f9; color: #173452; }
 .form-app .hospital-alert ul { display: grid; gap: 2px; margin: 4px 0 0; padding-left: 20px; list-style: disc; }
 .form-app .hospital-alert ul + p { margin-top: 10px; }
-.form-app .hospital-alert a { color: inherit; font-weight: 700; }
+.form-app [hidden] { display: none !important; }
 .form-app .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 36px; padding: 8px 14px; border: 1px solid transparent; border-radius: 8px; background: #078bc2; color: #fff; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
 .form-app .btn:hover { background: #0675a5; }
 .form-app .btn[data-variant="outline"], .form-app .btn[data-variant="ghost"] { border-color: #d8e3ed; background: #fff; color: #173452; }
