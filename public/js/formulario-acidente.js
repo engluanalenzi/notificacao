@@ -190,14 +190,10 @@ function addField(block, labelText) {
 }
 
 function addChoices(field, choices, selectedValues) {
-  const list = document.createElement('ul');
-  list.className = 'pf-choices';
-  choices.forEach(({ value, label }) => {
-    const option = document.createElement('li');
-    option.textContent = `${selectedValues.includes(value) ? '[x]' : '[ ]'} ${label}`;
-    list.appendChild(option);
-  });
-  field.appendChild(list);
+  const labels = choices
+    .filter((choice) => selectedValues.includes(choice.value))
+    .map((choice) => choice.label);
+  addAnswer(field, labels.join('; '));
 }
 
 function addAnswer(field, value) {
@@ -241,10 +237,6 @@ root.querySelectorAll('.screen[data-screen]').forEach((screen) => {
       const unit = following.querySelector('select[data-key]');
       const field = addField(block, labelText);
       addAnswer(field, quantity.value ? `${quantity.value} ${unit.value}` : '');
-      addChoices(field, Array.from(unit.options).map((option) => ({
-        value: option.value || option.textContent,
-        label: option.textContent.trim()
-      })), [unit.value]);
       return;
     }
 
@@ -253,10 +245,10 @@ root.querySelectorAll('.screen[data-screen]').forEach((screen) => {
       if (!control) return;
       const field = addField(block, labelText);
       if (control instanceof HTMLSelectElement) {
-        const choices = Array.from(control.options)
-          .filter((option) => option.value !== '')
-          .map((option) => ({ value: option.value, label: option.textContent.trim() }));
-        addChoices(field, choices, [control.value]);
+        const selected = control.value
+          ? Array.from(control.selectedOptions).map((option) => option.textContent.trim())
+          : [];
+        addAnswer(field, selected.join('; '));
       } else {
         const value = control.type === 'date' && control.value
           ? formatDate(control.value)
